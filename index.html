@@ -6,6 +6,10 @@
 <title>OutWatch Support</title>
 <meta name="description" content="OutWatch is a departure alarm for iPhone and Apple Watch that only turns off once you have actually left home. Quick start, FAQ and support.">
 <meta name="color-scheme" content="dark">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="shortcut icon" href="./favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
 <style>
   :root {
     --bg: #0b0d10;
@@ -40,9 +44,7 @@
   header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 56px; }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 0.2px; color: var(--text); text-decoration: none; }
   .mark {
-    width: 26px; height: 26px; border-radius: 8px;
-    background: radial-gradient(circle at 50% 120%, var(--accent-2) 0 32%, var(--accent) 33% 52%, #2a1a10 53%);
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset;
+    width: 26px; height: 26px; border-radius: 7px; display: block;
   }
   nav.links { display: flex; gap: 18px; font-size: 14px; }
   nav.links a { color: var(--muted); text-decoration: none; }
@@ -101,7 +103,7 @@
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="./"><span class="mark" aria-hidden="true"></span>OutWatch</a>
+    <a class="brand" href="./"><img class="mark" src="./favicon.svg" width="26" height="26" alt="">OutWatch</a>
     <nav class="links" aria-label="Page sections">
       <a href="#how">How it works</a>
       <a href="#faq">FAQ</a>

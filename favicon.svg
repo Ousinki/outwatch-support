@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg-charcoal" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1024" y2="1024">
+      <stop offset="0%" stop-color="#1E1C21" />
+      <stop offset="100%" stop-color="#100F12" />
+    </linearGradient>
+    <linearGradient id="sky-arch" gradientUnits="userSpaceOnUse" x1="512" y1="168" x2="512" y2="690">
+      <stop offset="0%" stop-color="#FFD452" />
+      <stop offset="50%" stop-color="#FF7B29" />
+      <stop offset="100%" stop-color="#FF3D1F" />
+    </linearGradient>
+    <linearGradient id="sun-beam" gradientUnits="userSpaceOnUse" x1="512" y1="640" x2="240" y2="940">
+      <stop offset="0%" stop-color="#FF6B2B" stop-opacity="0.85" />
+      <stop offset="60%" stop-color="#FF5228" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="#FF3D1F" stop-opacity="0.0" />
+    </linearGradient>
+    <clipPath id="squircle">
+      <rect width="1024" height="1024" rx="224" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#squircle)">
+    <rect width="1024" height="1024" fill="url(#bg-charcoal)" />
+    <g transform="translate(512 520) scale(1.38) translate(-512 -540)">
+      <polygon points="352,672 672,672 472,960 112,960" fill="url(#sun-beam)" />
+      <path d="M 352 672 L 352 348 A 160 160 0 0 1 672 348 L 672 672 Z" fill="url(#sky-arch)" />
+      <circle cx="512" cy="568" r="56" fill="#FFFDF9" />
+    </g>
+    <rect x="16" y="16" width="992" height="992" rx="208" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="32" />
+  </g>
+</svg>
