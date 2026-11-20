@@ -45,9 +45,47 @@
   .mark {
     width: 26px; height: 26px; border-radius: 7px; display: block;
   }
-  .lang { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 3px; font-size: 14px; }
-  .lang a { color: var(--muted); text-decoration: none; padding: 4px 12px; border-radius: 999px; }
-  .lang a:hover { color: var(--text); background: #1f252d; }
+  .lang {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .lang-thumb {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc(50% - 3px);
+    border-radius: 999px;
+    background: #28303b;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.10) inset;
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  html[data-active-lang="zh"] .lang-thumb { transform: translateX(100%); }
+  .lang a {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 5px 14px;
+    border-radius: 999px;
+    transition: color 0.18s ease;
+    white-space: nowrap;
+  }
+  .lang a:hover { color: var(--text); }
+  html[data-active-lang="en"] .lang a[data-lang="en"],
+  html[data-active-lang="zh"] .lang a[data-lang="zh"] { color: #ffffff; }
+  html[data-active-lang="en"] #zh,
+  html[data-active-lang="zh"] #en { display: none; }
   .intro { padding: 56px 0 8px; }
   h1 { font-size: clamp(30px, 5.5vw, 42px); line-height: 1.15; margin: 0 0 10px; letter-spacing: -0.4px; }
   h2 { font-size: 21px; margin: 36px 0 10px; letter-spacing: -0.2px; }
@@ -68,6 +106,7 @@
   .table td { color: #cfcbc3; }
   article { padding-bottom: 32px; }
   article + article { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 8px; }
+  html[data-active-lang] article + article { border-top: 0; margin-top: 0; padding-top: 0; }
   footer { border-top: 1px solid var(--border); padding: 28px 0 48px; color: var(--muted); font-size: 14px; }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
   @media (max-width: 600px) {
@@ -78,15 +117,28 @@
     .table td:first-child { white-space: normal; }
   }
 </style>
+<script>
+(function () {
+  var h = location.hash;
+  var saved = null;
+  try { saved = localStorage.getItem('outwatch.privacy.lang'); } catch (e) {}
+  var lang = (h === '#zh' || h === '#health-zh') ? 'zh'
+    : (h === '#en' || h === '#health') ? 'en'
+    : (saved === 'zh' || saved === 'en') ? saved
+    : ((navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en');
+  document.documentElement.setAttribute('data-active-lang', lang);
+})();
+</script>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
     <a class="brand" href="./"><img class="mark" src="./favicon.svg" width="26" height="26" alt="">OutWatch</a>
-    <nav class="lang" aria-label="Language">
-      <a href="#en" hreflang="en">English</a>
-      <a href="#zh" hreflang="zh-Hans">简体中文</a>
+    <nav class="lang" role="tablist" aria-label="Language">
+      <span class="lang-thumb" aria-hidden="true"></span>
+      <a href="#en" hreflang="en" data-lang="en" role="tab">English</a>
+      <a href="#zh" hreflang="zh-Hans" data-lang="zh" role="tab">简体中文</a>
     </nav>
   </div>
 </header>
@@ -266,5 +318,55 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  var root = document.documentElement;
+  var tabs = document.querySelectorAll('.lang a[data-lang]');
+
+  function applyLang(lang, options) {
+    if (lang !== 'zh' && lang !== 'en') return;
+    root.setAttribute('data-active-lang', lang);
+    root.lang = lang === 'zh' ? 'zh-Hans' : 'en';
+    tabs.forEach(function (tab) {
+      var active = tab.getAttribute('data-lang') === lang;
+      tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      if (active) {
+        tab.setAttribute('aria-current', 'true');
+      } else {
+        tab.removeAttribute('aria-current');
+      }
+    });
+    if (options && options.persist) {
+      try { localStorage.setItem('outwatch.privacy.lang', lang); } catch (e) {}
+    }
+    if (options && options.hash) {
+      try { history.replaceState(null, '', '#' + lang); } catch (e) {}
+    }
+    if (options && options.scrollTop) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  var initial = root.getAttribute('data-active-lang') || 'en';
+  applyLang(initial, { persist: false, hash: false, scrollTop: false });
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function (e) {
+      e.preventDefault();
+      var lang = tab.getAttribute('data-lang');
+      applyLang(lang, { persist: true, hash: true, scrollTop: true });
+    });
+  });
+
+  window.addEventListener('hashchange', function () {
+    var h = location.hash;
+    if (h === '#zh' || h === '#health-zh') {
+      applyLang('zh', { persist: true, hash: false, scrollTop: h === '#zh' });
+    } else if (h === '#en' || h === '#health') {
+      applyLang('en', { persist: true, hash: false, scrollTop: h === '#en' });
+    }
+  });
+})();
+</script>
 </body>
 </html>
