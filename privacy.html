@@ -122,8 +122,8 @@
   var h = location.hash;
   var saved = null;
   try { saved = localStorage.getItem('outwatch.privacy.lang'); } catch (e) {}
-  var lang = (h === '#zh' || h === '#health-zh') ? 'zh'
-    : (h === '#en' || h === '#health') ? 'en'
+  var lang = (h === '#zh') ? 'zh'
+    : (h === '#en') ? 'en'
     : (saved === 'zh' || saved === 'en') ? saved
     : ((navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en');
   document.documentElement.setAttribute('data-active-lang', lang);
@@ -181,49 +181,37 @@
     <li>Motion data is read only during an alarm session, processed on your device, and never stored externally or shared.</li>
   </ul>
 
-  <h2 id="health">3. HealthKit (Apple Health)</h2>
-  <div class="callout">
-    <p>OutWatch uses HealthKit only for <strong>Rainy Day Indoor Redemption</strong>, an optional mode for bad weather where you can turn off the alarm by keeping your heart rate up indoors instead of going outside.</p>
-    <ul>
-      <li><strong>Read:</strong> live heart rate, read strictly on-device and <strong>only while a Rainy Day Indoor Redemption session is active</strong>. Reading stops when the session ends.</li>
-      <li><strong>Write (workouts):</strong> watchOS requires workout permission for an app to run the temporary indoor workout session that keeps the heart-rate sensor sampling continuously. When the session finishes, <strong>OutWatch immediately discards that workout</strong>. It is never saved, so it doesn't clutter your Health history or Activity rings. (Heart-rate readings that your Apple Watch takes on its own are managed by watchOS, as usual.)</li>
-      <li>HealthKit data is <strong>never stored outside your device, never uploaded, never used for advertising, marketing or data mining, and never shared with or sold to third parties</strong>. It isn't stored in iCloud by OutWatch either.</li>
-      <li>The only heart-rate values OutWatch keeps are the current reading during the session and the session's peak BPM, saved in your on-device check-in history. They're shared only with your own paired iPhone or Apple Watch, so both screens show the same progress.</li>
-    </ul>
-  </div>
-
-  <h2>4. System alarms &amp; notifications</h2>
+  <h2>3. System alarms &amp; notifications</h2>
   <ul>
     <li><strong>AlarmKit</strong> (iOS 26 and later): your departure alarm is scheduled with the system alarm service, so it rings even when OutWatch is closed.</li>
     <li><strong>Local notifications:</strong> departure cues and reminders are scheduled on your device by your device. There are no push notifications and no notification servers.</li>
   </ul>
 
-  <h2>5. Apple Watch sync (WatchConnectivity)</h2>
-  <p>Your iPhone and Apple Watch keep your settings, the alarm's live state (stage, distance to your goal, steps, heart rate in Rainy Day mode) and your check-in history in sync. They use Apple's WatchConnectivity framework, which sends data directly between your own paired devices. OutWatch has no server in between and can't see this data.</p>
+  <h2>4. Apple Watch sync (WatchConnectivity)</h2>
+  <p>Your iPhone and Apple Watch keep your settings, the alarm's live state (stage, distance to your goal, steps) and your check-in history in sync. They use Apple's WatchConnectivity framework, which sends data directly between your own paired devices. OutWatch has no server in between and can't see this data.</p>
 
-  <h2>6. On-device storage (UserDefaults)</h2>
-  <p>Your settings, schedule, home base and checkpoint coordinates, language preference and check-in history (date, unlock method, duration, distance, and steps or peak heart rate) are saved in the app's local storage on each device. This storage is used only by OutWatch itself, as declared in the app's privacy manifest. Deleting the app deletes this data.</p>
+  <h2>5. On-device storage (UserDefaults)</h2>
+  <p>Your settings, schedule, home base and checkpoint coordinates, language preference and check-in history (date, unlock method, duration, distance, and steps) are saved in the app's local storage on each device. This storage is used only by OutWatch itself, as declared in the app's privacy manifest. Deleting the app deletes this data.</p>
 
-  <h2>7. Summary of permissions</h2>
+  <h2>6. Summary of permissions</h2>
   <table class="table">
     <thead><tr><th>Permission</th><th>Used for</th><th>When</th></tr></thead>
     <tbody>
       <tr><td>Location (When In Use)</td><td>Map, home base, live distance</td><td>Map on screen; alarm session</td></tr>
       <tr><td>Location (Always)</td><td>Departure check with the phone locked</td><td>Active alarm session only</td></tr>
       <tr><td>Motion &amp; Fitness</td><td>Stationary drift guard; offline stride fallback</td><td>Active alarm session only</td></tr>
-      <tr><td>Health</td><td>Live heart rate for Rainy Day mode</td><td>Rainy Day session only</td></tr>
       <tr><td>Notifications / Alarms</td><td>Departure cues and the alarm itself</td><td>Scheduled on device</td></tr>
     </tbody>
   </table>
-  <p>Every permission is optional and can be changed at any time in Settings. Without Location, OutWatch can't tell that you've left, so only Rainy Day mode can turn off the alarm.</p>
+  <p>Every permission is optional and can be changed at any time in Settings. Without Location, OutWatch can't verify when you've left home or reached your checkpoint.</p>
 
-  <h2>8. Children</h2>
+  <h2>7. Children</h2>
   <p>OutWatch doesn't collect personal information from anyone, including children.</p>
 
-  <h2>9. Changes to this policy</h2>
+  <h2>8. Changes to this policy</h2>
   <p>If this policy changes, the updated version will be posted on this page with a new effective date. If OutWatch ever started collecting data, it would only happen with clear notice in the app and an updated App Store privacy label first.</p>
 
-  <h2>10. Contact</h2>
+  <h2>9. Contact</h2>
   <p>Questions about privacy? Email <a href="mailto:ousinki@icloud.com">ousinki@icloud.com</a>.</p>
 </article>
 
@@ -263,49 +251,37 @@
     <li>运动数据只在闹钟期间读取，在设备上处理，绝不存储到外部，也不会共享。</li>
   </ul>
 
-  <h2 id="health-zh">3. HealthKit（Apple 健康）</h2>
-  <div class="callout">
-    <p>OutWatch 只在<strong>“雨天室内补救”</strong>模式下使用 HealthKit。这是一个可选模式：遇到恶劣天气时，您可以在室内保持较高心率来关闭闹钟，而不必出门。</p>
-    <ul>
-      <li><strong>读取：</strong>实时心率，严格在设备上读取，且<strong>仅在“雨天室内补救”进行期间</strong>读取。模式结束后立即停止读取。</li>
-      <li><strong>写入（体能训练）：</strong>watchOS 要求 App 获得体能训练权限，才能运行让心率传感器持续采样的临时室内训练。训练结束后，<strong>OutWatch 会立即丢弃这次训练</strong>，绝不保存，因此不会打乱您的健康记录或活动圆环。（Apple Watch 自行测量的心率数据仍由 watchOS 照常管理。）</li>
-      <li>HealthKit 数据<strong>绝不存储到设备之外、绝不上传、绝不用于广告、营销或数据挖掘，也绝不与第三方共享或出售</strong>。OutWatch 也不会把这些数据存到 iCloud。</li>
-      <li>OutWatch 只保留模式进行中的当前心率，以及本次的最高心率（保存在设备上的打卡记录中）。这些数值只会同步到您自己配对的 iPhone 或 Apple Watch，以便两块屏幕显示相同的进度。</li>
-    </ul>
-  </div>
-
-  <h2>4. 系统闹钟与通知</h2>
+  <h2>3. 系统闹钟与通知</h2>
   <ul>
     <li><strong>AlarmKit</strong>（iOS 26 及更高版本）：出门闹钟通过系统闹钟服务安排，即使 OutWatch 已关闭也会响铃。</li>
     <li><strong>本地通知：</strong>出门提醒由您的设备在本机安排。没有推送通知，也没有通知服务器。</li>
   </ul>
 
-  <h2>5. Apple Watch 同步（WatchConnectivity）</h2>
-  <p>您的 iPhone 和 Apple Watch 会同步设置、闹钟的实时状态（阶段、到目标的距离、步数，以及“雨天”模式下的心率）和打卡记录。同步使用 Apple 的 WatchConnectivity 框架，数据直接在您自己配对的设备之间传输。中间没有 OutWatch 服务器，OutWatch 也看不到这些数据。</p>
+  <h2>4. Apple Watch 同步（WatchConnectivity）</h2>
+  <p>您的 iPhone 和 Apple Watch 会同步设置、闹钟的实时状态（阶段、到目标的距离、步数）和打卡记录。同步使用 Apple 的 WatchConnectivity 框架，数据直接在您自己配对的设备之间传输。中间没有 OutWatch 服务器，OutWatch 也看不到这些数据。</p>
 
-  <h2>6. 本地存储（UserDefaults）</h2>
-  <p>您的设置、日程、家与检查点的坐标、语言偏好和打卡记录（日期、解除方式、用时、距离，以及步数或最高心率）保存在每台设备上 App 自己的本地存储中。这些存储只供 OutWatch 自己使用，已在 App 的隐私清单中声明。删除 App 即会删除这些数据。</p>
+  <h2>5. 本地存储（UserDefaults）</h2>
+  <p>您的设置、日程、家与检查点的坐标、语言偏好和打卡记录（日期、解除方式、用时、距离和步数）保存在每台设备上 App 自己的本地存储中。这些存储只供 OutWatch 自己使用，已在 App 的隐私清单中声明。删除 App 即会删除这些数据。</p>
 
-  <h2>7. 权限一览</h2>
+  <h2>6. 权限一览</h2>
   <table class="table">
     <thead><tr><th>权限</th><th>用途</th><th>使用时机</th></tr></thead>
     <tbody>
       <tr><td>位置（使用期间）</td><td>地图、家的位置、实时距离</td><td>地图显示时；闹钟期间</td></tr>
       <tr><td>位置（始终）</td><td>锁屏时确认是否出门</td><td>仅限闹钟进行期间</td></tr>
       <tr><td>运动与健身</td><td>静止漂移防护；离线步幅备用</td><td>仅限闹钟进行期间</td></tr>
-      <tr><td>健康</td><td>“雨天”模式的实时心率</td><td>仅限“雨天”模式期间</td></tr>
       <tr><td>通知 / 闹钟</td><td>出门提醒和闹钟本身</td><td>在设备上安排</td></tr>
     </tbody>
   </table>
-  <p>所有权限都是可选的，可随时在“设置”中更改。如果不授予位置权限，OutWatch 无法判断您是否已出门，此时只能通过“雨天”模式关闭闹钟。</p>
+  <p>所有权限都是可选的，可随时在“设置”中更改。如果不授予位置权限，OutWatch 将无法判断您是否已离开家或抵达检查点。</p>
 
-  <h2>8. 儿童</h2>
+  <h2>7. 儿童</h2>
   <p>OutWatch 不收集任何人（包括儿童）的个人信息。</p>
 
-  <h2>9. 政策变更</h2>
+  <h2>8. 政策变更</h2>
   <p>如果本政策有变，更新后的版本会发布在本页并标明新的生效日期。若 OutWatch 将来要收集任何数据，一定会先在 App 内明确告知，并更新 App Store 隐私标签。</p>
 
-  <h2>10. 联系方式</h2>
+  <h2>9. 联系方式</h2>
   <p>如对隐私有任何疑问，请发邮件至 <a href="mailto:ousinki@icloud.com">ousinki@icloud.com</a>。</p>
 </article>
 
@@ -360,10 +336,10 @@
 
   window.addEventListener('hashchange', function () {
     var h = location.hash;
-    if (h === '#zh' || h === '#health-zh') {
-      applyLang('zh', { persist: true, hash: false, scrollTop: h === '#zh' });
-    } else if (h === '#en' || h === '#health') {
-      applyLang('en', { persist: true, hash: false, scrollTop: h === '#en' });
+    if (h === '#zh') {
+      applyLang('zh', { persist: true, hash: false, scrollTop: true });
+    } else if (h === '#en') {
+      applyLang('en', { persist: true, hash: false, scrollTop: true });
     }
   });
 })();
